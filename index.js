@@ -3,7 +3,8 @@ const { studentSchema } = require("./zodSchema/student");
 const pool = require("./db");
 const app = express();
 app.use(express.json());
-
+const cors = require('cors');
+app.use(cors());
 let students = [];
 
 app.post("/student", async (req, res) => {
@@ -23,7 +24,7 @@ app.post("/student", async (req, res) => {
 
     const dbResult = await pool.query(insertQuery, values);
 
-    res.status(201).json(dbResult.rows);
+    res.status(201).json(dbResult.rows[0]);
   } catch (err) {
     if (err.code === "23505") {
       return res.status(409).json({ error: "Roll number already exists" });
